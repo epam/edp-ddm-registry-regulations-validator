@@ -1,0 +1,3 @@
+app:
+  settings-yaml-path: settings.yaml
+  main-liquibase-path: data-model/main-liquibase.xml
