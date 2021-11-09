@@ -1,6 +1,8 @@
 package com.epam.digital.data.platform.validator.config;
 
+import com.deliveredtechnologies.rulebook.spring.SpringAwareRuleBookRunner;
 import com.epam.digital.data.platform.validator.model.SettingsYaml;
+import com.epam.digital.data.platform.validator.model.ValidationResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.FileInputStream;
@@ -11,10 +13,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
 @Configuration
-public class MainConfig {
+public class SettingsYamlConfig {
 
   @Bean
-  public SettingsYaml settings(@Value("file:${app.settings-yaml-path}") Resource file,
+  public SettingsYaml settingsYaml(@Value("file:${app.settings-yaml-path}") Resource file,
       ObjectMapper mapper) throws IOException {
     return mapper.readValue(new FileInputStream(file.getFile()), SettingsYaml.class);
   }
@@ -22,5 +24,13 @@ public class MainConfig {
   @Bean
   public ObjectMapper yamlMapper() {
     return new ObjectMapper(new YAMLFactory());
+  }
+
+  @Bean
+  public SpringAwareRuleBookRunner settingsYamlRuleBook() {
+    var springAwareRuleBookRunner = new SpringAwareRuleBookRunner(
+        "com.epam.digital.data.platform.validator.rulebooks.settings.rules");
+    springAwareRuleBookRunner.setDefaultResult(new ValidationResult());
+    return springAwareRuleBookRunner;
   }
 }

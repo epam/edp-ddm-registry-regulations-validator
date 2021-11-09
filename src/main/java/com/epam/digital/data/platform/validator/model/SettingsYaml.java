@@ -1,6 +1,8 @@
 package com.epam.digital.data.platform.validator.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 
 public class SettingsYaml {
 
@@ -17,7 +19,9 @@ public class SettingsYaml {
   public static class Settings {
 
     private General general;
-    private Kafka kafka;
+
+    @JsonSetter(nulls = Nulls.SKIP)
+    private Kafka kafka = new Kafka();
 
     public General getGeneral() {
       return general;
@@ -70,8 +74,9 @@ public class SettingsYaml {
 
   public static class Kafka {
 
+    @JsonSetter(nulls = Nulls.SKIP)
     @JsonProperty("retention-policy-in-days")
-    private RetentionPolicyInDays retentionPolicyInDays;
+    private RetentionPolicyInDays retentionPolicyInDays = new RetentionPolicyInDays();
 
     public RetentionPolicyInDays getRetentionPolicyInDays() {
       return retentionPolicyInDays;
@@ -84,8 +89,11 @@ public class SettingsYaml {
 
   public static class RetentionPolicyInDays {
 
-    private Integer read;
-    private Integer write;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private Integer read = 3 * 365;
+
+    @JsonSetter(nulls = Nulls.SKIP)
+    private Integer write = 3 * 365;
 
     public Integer getRead() {
       return read;

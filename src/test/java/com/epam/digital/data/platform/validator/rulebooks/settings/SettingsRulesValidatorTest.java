@@ -7,25 +7,46 @@ import static com.epam.digital.data.platform.validator.rulebooks.settings.MockSe
 import static com.epam.digital.data.platform.validator.rulebooks.settings.MockSettings.Field.VERSION;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.deliveredtechnologies.rulebook.model.RuleBook;
+import com.epam.digital.data.platform.validator.model.SettingsYaml;
 import com.epam.digital.data.platform.validator.model.ValidationResult;
+import com.epam.digital.data.platform.validator.rulebooks.config.SettingsYamlTestConfig;
+import com.epam.digital.data.platform.validator.rulebooks.mainliquibase.MainLiquibaseFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.util.ReflectionTestUtils;
 
+@SpringBootTest(classes = {SettingsYamlRulesValidator.class})
+@Import(SettingsYamlTestConfig.class)
 class SettingsRulesValidatorTest {
+
+  @Autowired
+  SettingsYamlRulesValidator validator;
+  @Autowired
+  RuleBook<ValidationResult> settingsYamlRuleBook;
+
+  @MockBean
+  MainLiquibaseFacade service;
 
   private ValidationResult result;
 
   @BeforeEach
   void init() {
     result = new ValidationResult();
+    settingsYamlRuleBook.setDefaultResult(new ValidationResult());
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"1.2.3.", "1.2..3", "1.2", "1.2.3.4", "a.2.3", "_.2.3", "1111.2.3"})
-  void shouldFailOnEveryInvalidVersionFormat(String version) {
-    var validator = new SettingsRulesValidator(new MockSettings().set(VERSION, version).instance);
+  void shouldWriteErrorOnEveryInvalidVersionFormat(String version) {
+    SettingsYaml settingsYaml = new MockSettings().set(VERSION, version).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -36,7 +57,8 @@ class SettingsRulesValidatorTest {
   @ParameterizedTest
   @ValueSource(strings = {"1.2.3", "000.555.999"})
   void shouldNotFailOnEveryValidVersionFormat(String version) {
-    var validator = new SettingsRulesValidator(new MockSettings().set(VERSION, version).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(VERSION, version).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -48,7 +70,8 @@ class SettingsRulesValidatorTest {
   @ValueSource(strings = {"1aa.bb", "aa.1bb", "Aa.bb", "aA.bb", "aa.bb.", "aa/bb", "aa.b+b",
       "if", "aa.default", "aa.strictfp"})
   void shouldFailOnEveryInvalidPackageFormat(String pkg) {
-    var validator = new SettingsRulesValidator(new MockSettings().set(PACKAGE, pkg).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(PACKAGE, pkg).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -57,9 +80,11 @@ class SettingsRulesValidatorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"a1a.bb", "aa._1bb", "a.bb._", "a", "aa.bb", "aa_bb", "___.____", "when"})
+  @ValueSource(strings = {"a1a.bb", "aa._1bb", "a.bb._", "a", "aa.bb", "aa_bb", "___.____",
+      "when"})
   void shouldNotFailOnEveryValidPackageFormat(String pkg) {
-    var validator = new SettingsRulesValidator(new MockSettings().set(PACKAGE, pkg).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(PACKAGE, pkg).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -70,7 +95,8 @@ class SettingsRulesValidatorTest {
   @ParameterizedTest
   @ValueSource(strings = {"db.name", "dbNameMoreThan31symbol3456789012", "db-name", "5dbName"})
   void shouldFailOnEveryInvalidDatabaseName(String dbName) {
-    var validator = new SettingsRulesValidator(new MockSettings().set(REGISTER, dbName).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(REGISTER, dbName).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -81,7 +107,8 @@ class SettingsRulesValidatorTest {
   @ParameterizedTest
   @ValueSource(strings = {"DB_Name", "dbNameLessThan32symbol345678901", "_d_b_N_a_m_e_"})
   void shouldNotFailOnEveryValidDatabaseName(String dbName) {
-    var validator = new SettingsRulesValidator(new MockSettings().set(REGISTER, dbName).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(REGISTER, dbName).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -91,7 +118,8 @@ class SettingsRulesValidatorTest {
 
   @Test
   void shouldGenerateWarningWhenRetentionPolicyReadLessThen100() {
-    var validator = new SettingsRulesValidator(new MockSettings().set(RETENTION_READ, 99).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(RETENTION_READ, 99).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -101,7 +129,8 @@ class SettingsRulesValidatorTest {
 
   @Test
   void shouldNotGenerateWarningWhenRetentionPolicyReadMoreThen99() {
-    var validator = new SettingsRulesValidator(new MockSettings().set(RETENTION_READ, 100).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(RETENTION_READ, 100).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -111,7 +140,8 @@ class SettingsRulesValidatorTest {
 
   @Test
   void shouldGenerateWarningWhenRetentionPolicyWriteLessThen100() {
-    var validator = new SettingsRulesValidator(new MockSettings().set(RETENTION_WRITE, 99).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(RETENTION_WRITE, 99).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 
@@ -121,7 +151,8 @@ class SettingsRulesValidatorTest {
 
   @Test
   void shouldNotGenerateWarningWhenRetentionPolicyWriteMoreThen99() {
-    var validator = new SettingsRulesValidator(new MockSettings().set(RETENTION_WRITE, 100).instance);
+    SettingsYaml settingsYaml = new MockSettings().set(RETENTION_WRITE, 100).instance;
+    ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
 
     validator.validate(result);
 

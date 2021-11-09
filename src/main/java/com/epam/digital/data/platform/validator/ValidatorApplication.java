@@ -32,12 +32,16 @@ public class ValidatorApplication implements CommandLineRunner {
       rulesValidator.validate(result);
     }
 
+    printResults(result);
+  }
+
+  private void printResults(ValidationResult result) {
     System.err.println(result);
 
     if (!result.getWarnings().isEmpty()) {
       log.warn(String.join(",", result.getWarnings()));
     }
-    
+
     if (!result.getErrors().isEmpty()) {
       log.error(String.join(",", result.getErrors()));
       throw new ValidationException("Регламент не пройшов валідацію");

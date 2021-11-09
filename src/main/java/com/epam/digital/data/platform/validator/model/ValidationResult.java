@@ -30,6 +30,11 @@ public class ValidationResult {
     this.warnings = warnings;
   }
 
+  public void addResult(ValidationResult other) {
+    errors.addAll(other.getErrors());
+    warnings.addAll(other.getWarnings());
+  }
+
   @Override
   public String toString() {
     String message = "";
