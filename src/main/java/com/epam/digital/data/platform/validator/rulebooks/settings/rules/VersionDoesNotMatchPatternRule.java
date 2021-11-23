@@ -16,7 +16,7 @@ import com.epam.digital.data.platform.validator.rulebooks.settings.RulesOrder;
 @Rule(order = RulesOrder.versionDoesNotMatchPatternRule)
 public class VersionDoesNotMatchPatternRule {
 
-  private static final String VERSION_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
+  private static final String PLATFORM_VERSION_PATTERN = "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}";
 
   @Given(FactNames.SETTINGS_YAML)
   private SettingsYaml settingsYaml;
@@ -27,7 +27,7 @@ public class VersionDoesNotMatchPatternRule {
         .getSettings()
         .getGeneral()
         .getVersion()
-        .matches(VERSION_PATTERN);
+        .matches(PLATFORM_VERSION_PATTERN);
   }
 
   @Result

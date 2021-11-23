@@ -23,8 +23,9 @@ public class SubpackageIsJavaReservedWordRule {
           "finally", "throw", "throws", "private", "protected", "public", "import", "package",
           "class", "interface", "extends", "implements", "static", "final", "void", "abstract",
           "native", "new", "return", "this", "super", "synchronized", "volatile", "const", "goto",
-          "instanceof", "enum", "assert", "transient", "strictfp");
-
+          "instanceof", "enum", "assert", "transient", "strictfp", "_", "exports", "module",
+          "open", "opens", "provides", "requires", "to", "transitive", "uses", "with",
+          "false", "true", "null");
 
   @Given(FactNames.SETTINGS_YAML)
   private SettingsYaml settingsYaml;

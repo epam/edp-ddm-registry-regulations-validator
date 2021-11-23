@@ -16,7 +16,7 @@ import com.epam.digital.data.platform.validator.rulebooks.settings.RulesOrder;
 @Rule(order = RulesOrder.retentionPolicyReadRule)
 public class RetentionPolicyReadRule {
 
-  private static final int READ_DAYS = 100;
+  private static final int RETENTION_POLICY_READ_DAYS = 100;
 
   @Given(FactNames.SETTINGS_YAML)
   private SettingsYaml settingsYaml;
@@ -27,7 +27,7 @@ public class RetentionPolicyReadRule {
         .getSettings()
         .getKafka()
         .getRetentionPolicyInDays()
-        .getRead() < READ_DAYS;
+        .getRead() < RETENTION_POLICY_READ_DAYS;
   }
 
   @Result
@@ -37,7 +37,8 @@ public class RetentionPolicyReadRule {
   public RuleState then() {
     result.addWarning(
         String.format(
-            "Ви впевнені, що хочете зберігати дані у топіку READ меньше %d днів?", READ_DAYS));
+            "Ви впевнені, що хочете зберігати дані у топіку READ меньше %d днів?",
+            RETENTION_POLICY_READ_DAYS));
     return RuleState.NEXT;
   }
 }

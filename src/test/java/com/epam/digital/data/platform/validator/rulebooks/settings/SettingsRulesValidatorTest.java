@@ -68,7 +68,7 @@ class SettingsRulesValidatorTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"1aa.bb", "aa.1bb", "Aa.bb", "aA.bb", "aa.bb.", "aa/bb", "aa.b+b",
-      "if", "aa.default", "aa.strictfp"})
+      "if", "aa.default", "aa.strictfp", "aa.bb._"})
   void shouldFailOnEveryInvalidPackageFormat(String pkg) {
     SettingsYaml settingsYaml = new MockSettings().set(PACKAGE, pkg).instance;
     ReflectionTestUtils.setField(validator, "settingsYaml", settingsYaml);
@@ -80,7 +80,7 @@ class SettingsRulesValidatorTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"a1a.bb", "aa._1bb", "a.bb._", "a", "aa.bb", "aa_bb", "___.____",
+  @ValueSource(strings = {"a1a.bb", "aa._1bb", "a.bb.__", "a", "aa.bb", "aa_bb", "___.____",
       "when"})
   void shouldNotFailOnEveryValidPackageFormat(String pkg) {
     SettingsYaml settingsYaml = new MockSettings().set(PACKAGE, pkg).instance;

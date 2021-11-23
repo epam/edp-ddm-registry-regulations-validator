@@ -16,7 +16,7 @@ import com.epam.digital.data.platform.validator.rulebooks.settings.RulesOrder;
 @Rule(order = RulesOrder.databaseNameDoesNotMatchPatternRule)
 public class DatabaseNameDoesNotMatchPatternRule {
 
-  private static final String DATABASE_PATTERN = "^[a-zA-Z_]\\w{0,30}$";
+  private static final String DATABASE_NAME_PATTERN = "^[a-zA-Z_]\\w{0,30}$";
 
   @Given(FactNames.SETTINGS_YAML)
   private SettingsYaml settingsYaml;
@@ -27,7 +27,7 @@ public class DatabaseNameDoesNotMatchPatternRule {
         .getSettings()
         .getGeneral()
         .getRegister()
-        .matches(DATABASE_PATTERN);
+        .matches(DATABASE_NAME_PATTERN);
   }
 
   @Result

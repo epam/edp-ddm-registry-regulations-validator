@@ -16,7 +16,7 @@ import com.epam.digital.data.platform.validator.rulebooks.settings.RulesOrder;
 @Rule(order = RulesOrder.retentionPolicyWriteRule)
 public class RetentionPolicyWriteRule {
 
-  private static final int WRITE_DAYS = 100;
+  private static final int RETENTION_POLICY_WRITE_DAYS = 100;
 
   @Given(FactNames.SETTINGS_YAML)
   private SettingsYaml settingsYaml;
@@ -27,7 +27,7 @@ public class RetentionPolicyWriteRule {
         .getSettings()
         .getKafka()
         .getRetentionPolicyInDays()
-        .getWrite() < WRITE_DAYS;
+        .getWrite() < RETENTION_POLICY_WRITE_DAYS;
   }
 
   @Result
@@ -37,7 +37,8 @@ public class RetentionPolicyWriteRule {
   public RuleState then() {
     result.addWarning(
         String.format(
-            "Ви впевнені, що хочете зберігати дані у топіку WRITE меньше %d днів?", WRITE_DAYS));
+            "Ви впевнені, що хочете зберігати дані у топіку WRITE меньше %d днів?",
+            RETENTION_POLICY_WRITE_DAYS));
     return RuleState.NEXT;
   }
 }
