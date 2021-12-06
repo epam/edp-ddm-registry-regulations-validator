@@ -16,3 +16,6 @@ The application is supposed to be run from the root of the registry regulation f
 ###### Steps:
 1. (Optional) Package application into jar file with `mvn clean package`
 2. Run application with your favourite IDE or via `java -jar ...` with jar file, created above
+
+### License
+registry-regulations-validator is Open Source software released under the Apache 2.0 license.
