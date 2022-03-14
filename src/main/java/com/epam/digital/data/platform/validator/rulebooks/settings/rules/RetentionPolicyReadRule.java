@@ -53,7 +53,7 @@ public class RetentionPolicyReadRule {
   public RuleState then() {
     result.addWarning(
         String.format(
-            "Ви впевнені, що хочете зберігати дані у топіку READ меньше %d днів?",
+            "Ви впевнені, що хочете зберігати дані у топіку READ менше %d днів?",
             RETENTION_POLICY_READ_DAYS));
     return RuleState.NEXT;
   }

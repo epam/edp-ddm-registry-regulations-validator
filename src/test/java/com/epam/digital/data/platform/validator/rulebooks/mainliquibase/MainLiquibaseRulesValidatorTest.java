@@ -25,6 +25,7 @@ import com.epam.digital.data.platform.validator.config.MainLiquibaseConfig;
 import com.epam.digital.data.platform.validator.model.ValidationResult;
 import java.util.List;
 import liquibase.change.ColumnConfig;
+import liquibase.change.ConstraintsConfig;
 import liquibase.change.core.CreateTableChange;
 import liquibase.structure.core.Column;
 import org.junit.jupiter.api.BeforeEach;
@@ -139,6 +140,18 @@ class MainLiquibaseRulesValidatorTest {
           new ColumnConfig(
             new Column(
               "ten_chars1ten_chars2ten_chars3ten_chars4ten_chars5ten_chars6____")));
+
+      assertErrors(columns, 1);
+    }
+
+    @Test
+    void shouldWriteErrorWhenPrimaryKeyHasCapitalLetter() {
+      ConstraintsConfig constraints = new ConstraintsConfig();
+      constraints.setForeignKeyName("fk_with_capital_letteR");
+
+      ColumnConfig column = new ColumnConfig(new Column("abc"));
+      column.setConstraints(constraints);
+      List<ColumnConfig> columns = List.of(column);
 
       assertErrors(columns, 1);
     }

@@ -26,6 +26,8 @@ public class RulesOrder {
   public static final int columnNameStartsFromDigitRule = 4;
   public static final int columnNameHasCyrillicSymbolRule = 5;
   public static final int columnNameIsTooLongRule = 6;
+  
+  public static final int foreignKeyHasCapitalLetterRule = 7;
 
   private RulesOrder() {
   }
