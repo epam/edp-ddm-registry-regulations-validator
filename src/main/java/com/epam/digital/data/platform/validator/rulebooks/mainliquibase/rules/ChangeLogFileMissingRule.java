@@ -26,7 +26,9 @@ import com.deliveredtechnologies.rulebook.spring.RuleBean;
 import com.epam.digital.data.platform.validator.model.ValidationResult;
 import com.epam.digital.data.platform.validator.rulebooks.FactNames;
 import com.epam.digital.data.platform.validator.rulebooks.mainliquibase.RulesOrder;
-import java.io.File;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @RuleBean
 @Rule(order = RulesOrder.changeLogFileMissingRule)
@@ -37,7 +39,7 @@ public class ChangeLogFileMissingRule {
 
   @When
   public boolean isFileMissing() {
-    return !new File(path).exists();
+    return !Files.exists(Path.of(path));
   }
 
   @Result

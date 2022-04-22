@@ -13,13 +13,14 @@
 
   <groupId>com.epam.digital.data.platform</groupId>
   <artifactId>registry-regulations-validator</artifactId>
-  <version>1.4.0-SNAPSHOT</version>
+  <version>1.6.0</version>
 
   <name>registry-regulations-validator</name>
   <description>Application for validating platform settings</description>
 
   <properties>
     <java.version>11</java.version>
+    <liquibase.ext.version>1.6.0.1</liquibase.ext.version>
     <jackson>2.12.4</jackson>
     <sonar.coverage.exclusions>
       <!-- do not calc coverage for the classes without BL: -->
@@ -37,7 +38,7 @@
     <dependency>
       <groupId>com.epam.digital.data.platform</groupId>
       <artifactId>liquibase-ddm-ext</artifactId>
-      <version>1.5.0-SNAPSHOT</version>
+      <version>${liquibase.ext.version}</version>
     </dependency>
 
     <dependency>
